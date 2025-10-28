@@ -256,13 +256,13 @@
             document.querySelectorAll('.chess-square').forEach(square => {
                 square.addEventListener('mouseenter', function() {
                     if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
-                        this.style.backgroundColor = this.classList.contains('light') ? '#eed26d' : '#ddb16f';
+                        this.style.backgroundColor = this.classList.contains('light') ? '#ccc' : '#666';
                     }
                 });
                 
                 square.addEventListener('mouseleave', function() {
                     if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
-                        this.style.backgroundColor = this.classList.contains('light') ? '#f0d9b5' : '#b58863';
+                        this.style.backgroundColor = this.classList.contains('light') ? 'white' : 'black';
                     }
                 });
             });

@@ -158,7 +158,7 @@
 <body>
     <main>
         <h1>8-Queens Problem</h1>
-        <p>✅ Found 10 solutions in 7747ms (showing solution 2)</p>
+        <p>✅ Found 10 solutions in 6911ms (showing solution 7)</p>
         
         <div class="board-container">
             <div class="board-with-labels">
@@ -196,26 +196,6 @@
                 <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
             </div>
 <div class="chess-row">
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-            </div>
-<div class="chess-row">
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-            </div>
-<div class="chess-row">
                 <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
@@ -230,28 +210,48 @@
                 <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
-                <div class="chess-square light"></div>
-            </div>
-<div class="chess-row">
-                <div class="chess-square light"></div>
                 <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
                 <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
-                <div class="chess-square light"></div>
-                <div class="chess-square dark"></div>
             </div>
 <div class="chess-row">
+                <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square dark"></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square dark"></div>
+                <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
                 <div class="chess-square dark"></div>
                 <div class="chess-square light"></div>
             </div>
@@ -308,21 +308,21 @@
                     <div class="detail-label">Constraints Satisfied</div>
                 </div>
                 <div class="detail-card">
-                    <div class="detail-value">7747ms</div>
+                    <div class="detail-value">6911ms</div>
                     <div class="detail-label">Solve Time</div>
                 </div>
             </div>
             
             <div class="coordinates">
                 <strong>Queen Positions:</strong><br>
-                Column 0 (A): Row 4 (4)<br>Column 1 (B): Row 6 (2)<br>Column 2 (C): Row 3 (5)<br>Column 3 (D): Row 0 (8)<br>Column 4 (E): Row 2 (6)<br>Column 5 (F): Row 7 (1)<br>Column 6 (G): Row 5 (3)<br>Column 7 (H): Row 1 (7)
+                Column 0 (A): Row 2 (6)<br>Column 1 (B): Row 5 (3)<br>Column 2 (C): Row 7 (1)<br>Column 3 (D): Row 0 (8)<br>Column 4 (E): Row 3 (5)<br>Column 5 (F): Row 6 (2)<br>Column 6 (G): Row 4 (4)<br>Column 7 (H): Row 1 (7)
             </div>
         </div>
     </main>
 
     <script>
         // Replay control variables
-        let queenPositions = [4, 6, 3, 0, 2, 7, 5, 1];
+        let queenPositions = [2, 5, 7, 0, 3, 6, 4, 1];
         let currentStep = 0;
         let isPlaying = false;
         let replayInterval = null;
@@ -352,13 +352,13 @@
             document.querySelectorAll('.chess-square').forEach(square => {
                 square.addEventListener('mouseenter', function() {
                     if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
-                        this.style.backgroundColor = this.classList.contains('light') ? '#eed26d' : '#ddb16f';
+                        this.style.backgroundColor = this.classList.contains('light') ? '#ccc' : '#666';
                     }
                 });
                 
                 square.addEventListener('mouseleave', function() {
                     if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
-                        this.style.backgroundColor = this.classList.contains('light') ? '#f0d9b5' : '#b58863';
+                        this.style.backgroundColor = this.classList.contains('light') ? 'white' : 'black';
                     }
                 });
             });
