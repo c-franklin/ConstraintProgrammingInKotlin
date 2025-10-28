@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.cpik.MainKt'
+    mainClass = 'com.cpik.NQueensWebUIKt'
 }
 
 test {

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Queens Solution Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .board-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .chessboard {
+            border: 3px solid #8B4513;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chess-row {
+            display: flex;
+        }
+
+        .chess-square {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .chess-square.light {
+            background-color: #f0d9b5;
+        }
+
+        .chess-square.dark {
+            background-color: #b58863;
+        }
+
+        .chess-square.queen {
+            animation: placeQueen 0.8s ease-out;
+        }
+
+        .chess-square.queen.hidden {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .chess-square.queen.placing {
+            animation: placeQueen 0.8s ease-out forwards;
+        }
+
+        @keyframes placeQueen {
+            0% {
+                transform: scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.2) rotate(-10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .control-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 10px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .control-button:active {
+            transform: translateY(0);
+        }
+
+        .control-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .speed-control {
+            margin: 15px 0;
+        }
+
+        .speed-control label {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #333;
+        }
+
+        .speed-slider {
+            width: 200px;
+            margin: 0 10px;
+        }
+
+        .step-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+            font-family: monospace;
+        }
+
+        .step-counter {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .queen-symbol {
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+        }
+
+        .info-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .solution-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .detail-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .detail-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .coordinates {
+            font-family: monospace;
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .board-labels {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .col-label, .row-label {
+            width: 60px;
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .row-labels {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+
+        .board-with-labels {
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .chess-square {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            .col-label, .row-label {
+                width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>4-Queens Problem</h1>
+        <p class="subtitle">✅ Optimal solution found in 15ms</p>
+        
+        <div class="controls">
+            <div class="step-counter" id="stepCounter">Ready to start</div>
+            <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
+            <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
+            <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
+            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
+            
+            <div class="speed-control">
+                <label for="speedSlider">Speed:</label>
+                <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="1000" 
+                       oninput="updateSpeed(this.value)">
+                <span id="speedDisplay">1.0x</span>
+            </div>
+            
+            <div class="step-info" id="stepInfo" style="display: none;">
+                <strong>Step <span id="currentStep">0</span> of 4:</strong><br>
+                <span id="stepDescription">Click Start Replay to begin</span>
+            </div>
+        </div>
+        
+        <div class="board-container">
+            <div class="board-with-labels">
+                <div class="row-labels">
+                    <div class="row-label">4</div>
+<div class="row-label">3</div>
+<div class="row-label">2</div>
+<div class="row-label">1</div>
+
+                </div>
+                <div>
+                    <div class="chessboard">
+                        <div class="chess-row">
+                <div class="chess-square light"></div>
+                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square light queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark"></div>
+            </div>
+<div class="chess-row">
+                <div class="chess-square dark"></div>
+                <div class="chess-square light"></div>
+                <div class="chess-square dark queen"><span class="queen-symbol">♛</span></div>
+                <div class="chess-square light"></div>
+            </div>
+
+                    </div>
+                    <div class="board-labels">
+                        <div class="col-label">A</div>
+<div class="col-label">B</div>
+<div class="col-label">C</div>
+<div class="col-label">D</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>Solution Details</h3>
+            <div class="solution-details">
+                <div class="detail-card">
+                    <div class="detail-value">4</div>
+                    <div class="detail-label">Board Size</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value">4</div>
+                    <div class="detail-label">Queens Placed</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value">3</div>
+                    <div class="detail-label">Constraints Satisfied</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value">15ms</div>
+                    <div class="detail-label">Solve Time</div>
+                </div>
+            </div>
+            
+            <div class="coordinates">
+                <strong>Queen Positions:</strong><br>
+                Column 0 (A): Row 2 (2)<br>Column 1 (B): Row 0 (4)<br>Column 2 (C): Row 3 (1)<br>Column 3 (D): Row 1 (3)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Replay control variables
+        let queenPositions = [2, 0, 3, 1];
+        let currentStep = 0;
+        let isPlaying = false;
+        let replayInterval = null;
+        let replaySpeed = 1000; // milliseconds
+
+        // Initialize - hide all queens initially
+        document.addEventListener('DOMContentLoaded', function() {
+            hideAllQueens();
+            setupHoverEffects();
+        });
+
+        function hideAllQueens() {
+            document.querySelectorAll('.chess-square.queen').forEach(square => {
+                square.classList.add('hidden');
+                square.classList.remove('placing');
+            });
+        }
+
+        function setupHoverEffects() {
+            document.querySelectorAll('.chess-square').forEach(square => {
+                square.addEventListener('mouseenter', function() {
+                    if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
+                        this.style.backgroundColor = this.classList.contains('light') ? '#eed26d' : '#ddb16f';
+                    }
+                });
+                
+                square.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('queen') || this.classList.contains('hidden')) {
+                        this.style.backgroundColor = this.classList.contains('light') ? '#f0d9b5' : '#b58863';
+                    }
+                });
+            });
+        }
+
+        function startReplay() {
+            if (isPlaying) return;
+            
+            isPlaying = true;
+            document.getElementById('replayBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('stepInfo').style.display = 'block';
+            
+            replayInterval = setInterval(nextStep, replaySpeed);
+        }
+
+        function pauseReplay() {
+            isPlaying = false;
+            document.getElementById('replayBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            
+            if (replayInterval) {
+                clearInterval(replayInterval);
+                replayInterval = null;
+            }
+        }
+
+        function resetReplay() {
+            pauseReplay();
+            currentStep = 0;
+            hideAllQueens();
+            updateStepDisplay();
+            document.getElementById('stepCounter').textContent = 'Ready to start';
+            document.getElementById('stepInfo').style.display = 'none';
+        }
+
+        function nextStep() {
+            if (currentStep >= queenPositions.length) {
+                // Replay finished
+                pauseReplay();
+                document.getElementById('stepCounter').textContent = 'Replay complete! 🎉';
+                document.getElementById('stepDescription').textContent = 'All queens placed successfully!';
+                return;
+            }
+
+            // Place the next queen
+            const queenCol = currentStep;
+            const queenRow = queenPositions[currentStep];
+            
+            // Find the square and place the queen
+            const squares = document.querySelectorAll('.chess-square');
+            const boardSize = Math.sqrt(squares.length);
+            const squareIndex = queenRow * boardSize + queenCol;
+            const square = squares[squareIndex];
+            
+            if (square && square.classList.contains('queen')) {
+                square.classList.remove('hidden');
+                square.classList.add('placing');
+            }
+
+            currentStep++;
+            updateStepDisplay();
+        }
+
+        function updateStepDisplay() {
+            const boardSize = queenPositions.length;
+            document.getElementById('currentStep').textContent = currentStep;
+            document.getElementById('stepCounter').textContent = `Step ${currentStep} of ${boardSize}`;
+            
+            if (currentStep > 0) {
+                const colLabel = String.fromCharCode(65 + (currentStep - 1)); // A, B, C...
+                const rowLabel = boardSize - queenPositions[currentStep - 1];
+                document.getElementById('stepDescription').textContent = 
+                    `Placed queen in column ${currentStep} (${colLabel}) at row ${queenPositions[currentStep - 1] + 1} (${rowLabel})`;
+            }
+        }
+
+        function updateSpeed(value) {
+            replaySpeed = parseInt(value);
+            const speedMultiplier = (2000 - replaySpeed + 100) / 1000; // Convert to speed multiplier
+            document.getElementById('speedDisplay').textContent = `${speedMultiplier.toFixed(1)}x`;
+            
+            // Update interval if currently playing
+            if (isPlaying && replayInterval) {
+                clearInterval(replayInterval);
+                replayInterval = setInterval(nextStep, replaySpeed);
+            }
+        }
+
+        // Initialize speed display
+        updateSpeed(1000);
+    </script>
+</body>
+</html>
