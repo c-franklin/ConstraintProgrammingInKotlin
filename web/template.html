@@ -75,6 +75,14 @@
             opacity: 0;
         }
 
+        .queen-symbol {
+            color: black;
+        }
+
+        .chess-square.dark .queen-symbol {
+            color: white;
+        }
+
         .step-info {
             border: 1px solid black;
             padding: 10px;
@@ -118,25 +126,32 @@
 
         .board-labels {
             display: flex;
-            justify-content: center;
-            margin-top: 10px;
+            justify-content: flex-start;
+            margin-top: 5px;
+            margin-left: 1px;
         }
 
         .col-label, .row-label {
             width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             font-size: 14px;
+            border: 1px solid transparent;
         }
 
         .row-labels {
             display: flex;
             flex-direction: column;
-            margin-right: 10px;
+            margin-right: 5px;
+            margin-top: 1px;
         }
 
         .board-with-labels {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
         }
     </style>
 </head>
@@ -158,6 +173,26 @@
                         {{COL_LABELS}}
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="step-counter" id="stepCounter">Ready to start</div>
+            <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
+            <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
+            <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
+            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
+            
+            <div class="speed-control">
+                <label for="speedSlider">Speed:</label>
+                <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="1000" 
+                       oninput="updateSpeed(this.value)">
+                <span id="speedDisplay">1.0x</span>
+            </div>
+            
+            <div class="step-info" id="stepInfo" style="display: none;">
+                <strong>Step <span id="currentStep">0</span> of {{BOARD_SIZE}}:</strong><br>
+                <span id="stepDescription">Click Start Replay to begin</span>
             </div>
         </div>
 
@@ -185,26 +220,6 @@
             <div class="coordinates">
                 <strong>Queen Positions:</strong><br>
                 {{QUEEN_POSITIONS}}
-            </div>
-        </div>
-
-        <div class="controls">
-            <div class="step-counter" id="stepCounter">Ready to start</div>
-            <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
-            <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
-            <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
-            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
-            
-            <div class="speed-control">
-                <label for="speedSlider">Speed:</label>
-                <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="1000" 
-                       oninput="updateSpeed(this.value)">
-                <span id="speedDisplay">1.0x</span>
-            </div>
-            
-            <div class="step-info" id="stepInfo" style="display: none;">
-                <strong>Step <span id="currentStep">0</span> of {{BOARD_SIZE}}:</strong><br>
-                <span id="stepDescription">Click Start Replay to begin</span>
             </div>
         </div>
     </main>

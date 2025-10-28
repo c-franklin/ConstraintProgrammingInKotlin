@@ -199,7 +199,7 @@ fun main() {
     println("=".repeat(40))
     
     // Try different board sizes
-    val boardSizes = listOf(4, 8, 10)
+    val boardSizes = listOf(8)
     
     for (size in boardSizes) {
         println("\n📋 Solving ${size}x${size} board...")
