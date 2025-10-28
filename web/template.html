@@ -153,12 +153,96 @@
             display: flex;
             align-items: flex-start;
         }
+
+        .solving-explanation {
+            margin: 15px 0;
+        }
+
+        .constraint-details, .process-steps {
+            margin: 10px 0;
+        }
+
+        .constraint-item, .step {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid black;
+        }
+
+        .verification {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8ff;
+            border: 1px solid #ccc;
+        }
+
+        .verification ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 4px;
+            font-family: monospace;
+            border: 1px solid #ccc;
+        }
+
+        .solution-navigator {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid black;
+            background: #f9f9f9;
+        }
+
+        .nav-button {
+            background: white;
+            color: black;
+            border: 1px solid black;
+            padding: 8px 16px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .nav-button:hover {
+            background: black;
+            color: white;
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            color: #666;
+        }
+
+        .solution-info {
+            font-weight: bold;
+            margin: 0 20px;
+        }
+
+        #bestMarker {
+            color: #ff6600;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
     <main>
         <h1>{{BOARD_SIZE}}-Queens Problem</h1>
         <p>{{SOLUTION_STATUS}}</p>
+        
+        <div class="solution-navigator">
+            <button class="nav-button" id="prevBtn" onclick="previousSolution()">« Previous</button>
+            <span class="solution-info">
+                Solution <span id="currentSolutionNumber">1</span> of {{SOLUTION_COUNT}}
+                <span id="bestMarker" style="display: none;">🏆 BEST</span>
+            </span>
+            <button class="nav-button" id="nextBtn" onclick="nextSolution()">Next »</button>
+        </div>
         
         <div class="board-container">
             <div class="board-with-labels">
@@ -174,6 +258,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="coordinates">
+            <strong>Queen Positions:</strong><br>
+            <span id="queenPositionsDisplay">{{QUEEN_POSITIONS}}</span>
         </div>
 
         <div class="controls">
@@ -197,6 +286,46 @@
         </div>
 
         <div class="info-panel">
+            <h3>How the Solver Found This Solution</h3>
+            
+            <div class="solving-explanation">
+                <h4>🧠 Constraint Programming Approach</h4>
+                <p>The CP-SAT solver uses <strong>constraint propagation</strong> and <strong>backtracking</strong> to find this solution:</p>
+                
+                <div class="constraint-details">
+                    <div class="constraint-item">
+                        <strong>1. Variables:</strong> Each column gets one queen. The solver decides which ROW each queen goes in.
+                    </div>
+                    <div class="constraint-item">
+                        <strong>2. Row Constraint:</strong> All queens must be in different rows (no horizontal attacks).
+                    </div>
+                    <div class="constraint-item">
+                        <strong>3. Diagonal Constraints:</strong> No two queens can share the same diagonal line.
+                        <br>• Main diagonal: <code>row + col</code> must be unique for each queen
+                        <br>• Anti-diagonal: <code>row - col</code> must be unique for each queen
+                    </div>
+                </div>
+                
+                <h4>🔍 Solver Process</h4>
+                <div class="process-steps">
+                    <div class="step">
+                        <strong>Step 1:</strong> Try placing first queen (column A). Solver picks a row.
+                    </div>
+                    <div class="step">
+                        <strong>Step 2:</strong> For column B, eliminate rows that would attack the A queen.
+                    </div>
+                    <div class="step">
+                        <strong>Step 3:</strong> Continue for each column, using constraint propagation to prune impossible choices.
+                    </div>
+                    <div class="step">
+                        <strong>Step 4:</strong> If stuck, backtrack and try different placement for previous queens.
+                    </div>
+                    <div class="step">
+                        <strong>Step 5:</strong> Found valid solution in {{SOLVE_TIME}}!
+                    </div>
+                </div>
+            </div>
+
             <h3>Solution Details</h3>
             <div class="solution-details">
                 <div class="detail-card">
@@ -217,16 +346,39 @@
                 </div>
             </div>
             
-            <div class="coordinates">
-                <strong>Queen Positions:</strong><br>
-                {{QUEEN_POSITIONS}}
+            
+            <div class="verification">
+                <h4>✅ Solution Verification</h4>
+                <p>Use the replay controls above to watch how each queen is placed without attacking others!</p>
+                <ul>
+                    <li><strong>Row attacks:</strong> Each queen is in a different row</li>
+                    <li><strong>Column attacks:</strong> Each queen is in a different column (by design)</li>
+                    <li><strong>Diagonal attacks:</strong> No two queens share diagonal lines</li>
+                </ul>
+            </div>
+
+            <div class="best-solution-explanation" id="bestExplanation" style="display: none;">
+                <h4>🏆 Why This Is The Best Solution</h4>
+                <p>This solution is marked as "best" because it has the most <strong>spread out</strong> queen placement pattern.</p>
+                <ul>
+                    <li><strong>Spread Score:</strong> Measures how far apart consecutive queens are placed</li>
+                    <li><strong>Better Distribution:</strong> Avoids clustering queens in similar rows</li>
+                    <li><strong>Aesthetic Appeal:</strong> Creates a more visually balanced arrangement</li>
+                </ul>
+                <p><em>Note: All solutions are mathematically equivalent - this is just one way to rank them!</em></p>
             </div>
         </div>
     </main>
 
     <script>
+        // Solution data
+        let allSolutions = {{ALL_SOLUTIONS_ARRAY}};
+        let currentSolutionIndex = {{SELECTED_SOLUTION}} - 1;
+        let bestSolutionIndex = {{BEST_SOLUTION_INDEX}};
+        let totalSolutions = {{SOLUTION_COUNT}};
+        
         // Replay control variables
-        let queenPositions = {{QUEEN_POSITIONS_ARRAY}};
+        let queenPositions = allSolutions[currentSolutionIndex] || [];
         let currentStep = 0;
         let isPlaying = false;
         let replayInterval = null;
@@ -234,7 +386,7 @@
 
         // Initialize - show solution by default
         document.addEventListener('DOMContentLoaded', function() {
-            showAllQueens();
+            updateSolutionDisplay();
             setupHoverEffects();
         });
 
@@ -304,9 +456,17 @@
         }
 
         function nextStep() {
+            // If not currently stepping/replaying, start stepping mode
+            if (!isPlaying && currentStep === 0) {
+                hideAllQueens();
+                document.getElementById('stepInfo').style.display = 'block';
+            }
+
             if (currentStep >= queenPositions.length) {
                 // Replay finished
-                pauseReplay();
+                if (isPlaying) {
+                    pauseReplay();
+                }
                 document.getElementById('stepCounter').textContent = 'Replay complete! 🎉';
                 document.getElementById('stepDescription').textContent = 'All queens placed successfully!';
                 return;
@@ -358,6 +518,91 @@
 
         // Initialize speed display
         updateSpeed(1000);
+
+        // Solution navigation functions
+        function updateSolutionDisplay() {
+            queenPositions = allSolutions[currentSolutionIndex] || [];
+            updateBoard();
+            updateSolutionInfo();
+            updateNavigationButtons();
+        }
+
+        function updateBoard() {
+            // Clear all queens first
+            document.querySelectorAll('.chess-square').forEach(square => {
+                square.classList.remove('queen');
+                const queenSpan = square.querySelector('.queen-symbol');
+                if (queenSpan) {
+                    queenSpan.remove();
+                }
+            });
+
+            // Place queens for current solution
+            const squares = document.querySelectorAll('.chess-square');
+            const boardSize = Math.sqrt(squares.length);
+            
+            queenPositions.forEach((row, col) => {
+                const squareIndex = row * boardSize + col;
+                const square = squares[squareIndex];
+                if (square) {
+                    square.classList.add('queen');
+                    const queenSpan = document.createElement('span');
+                    queenSpan.className = 'queen-symbol';
+                    queenSpan.textContent = '♛';
+                    square.appendChild(queenSpan);
+                }
+            });
+
+            showAllQueens();
+        }
+
+        function updateSolutionInfo() {
+            document.getElementById('currentSolutionNumber').textContent = currentSolutionIndex + 1;
+            const bestMarker = document.getElementById('bestMarker');
+            const bestExplanation = document.getElementById('bestExplanation');
+            
+            if (currentSolutionIndex === bestSolutionIndex) {
+                bestMarker.style.display = 'inline';
+                bestExplanation.style.display = 'block';
+            } else {
+                bestMarker.style.display = 'none';
+                bestExplanation.style.display = 'none';
+            }
+            
+            // Update queen positions display
+            updateQueenPositionsDisplay();
+        }
+        
+        function updateQueenPositionsDisplay() {
+            console.log('Updating queen positions:', queenPositions);
+            const boardSize = Math.sqrt(document.querySelectorAll('.chess-square').length);
+            const positionsHtml = queenPositions.map((row, col) => {
+                const colLabel = String.fromCharCode(65 + col); // A, B, C...
+                const rowLabel = boardSize - row; // 8, 7, 6...
+                return `Column ${col} (${colLabel}): Row ${row} (${rowLabel})`;
+            }).join('<br>');
+            
+            document.getElementById('queenPositionsDisplay').innerHTML = positionsHtml;
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prevBtn').disabled = currentSolutionIndex <= 0;
+            document.getElementById('nextBtn').disabled = currentSolutionIndex >= totalSolutions - 1;
+        }
+
+        function previousSolution() {
+            if (currentSolutionIndex > 0) {
+                currentSolutionIndex--;
+                updateSolutionDisplay();
+            }
+        }
+
+        function nextSolution() {
+            if (currentSolutionIndex < totalSolutions - 1) {
+                currentSolutionIndex++;
+                updateSolutionDisplay();
+            }
+        }
     </script>
 </body>
 </html>

@@ -109,8 +109,10 @@ class NQueensWebUI(private val boardSize: Int) {
             .replace("{{SOLVE_TIME}}", "${result.solveTimeMs}ms")
             .replace("{{QUEEN_POSITIONS}}", generateQueenPositions(currentSolution))
             .replace("{{QUEEN_POSITIONS_ARRAY}}", generateQueenPositionsArray(currentSolution))
+            .replace("{{ALL_SOLUTIONS_ARRAY}}", generateAllSolutionsArray(result.solutions))
             .replace("{{SOLUTION_COUNT}}", result.solutions.size.toString())
             .replace("{{SELECTED_SOLUTION}}", (result.selectedSolution + 1).toString())
+            .replace("{{BEST_SOLUTION_INDEX}}", findBestSolutionIndex(result.solutions).toString())
         
         val outputFile = File("web/nqueens_solution.html")
         outputFile.writeText(html)
@@ -191,6 +193,30 @@ class NQueensWebUI(private val boardSize: Int) {
     private fun generateQueenPositionsArray(solution: List<Int>?): String {
         if (solution == null) return "[]"
         return "[${solution.joinToString(", ")}]"
+    }
+    
+    private fun generateAllSolutionsArray(solutions: List<List<Int>>): String {
+        return "[${solutions.joinToString(", ") { "[${it.joinToString(", ")}]" }}]"
+    }
+    
+    private fun findBestSolutionIndex(solutions: List<List<Int>>): Int {
+        // For demonstration, let's say the "best" solution has queens more spread out
+        // We'll use the one with maximum distance between consecutive queens
+        if (solutions.isEmpty()) return 0
+        
+        return solutions.mapIndexed { index, solution ->
+            val spreadScore = calculateSpreadScore(solution)
+            index to spreadScore
+        }.maxByOrNull { it.second }?.first ?: 0
+    }
+    
+    private fun calculateSpreadScore(solution: List<Int>): Int {
+        // Calculate how "spread out" the queens are
+        var totalDistance = 0
+        for (i in 0 until solution.size - 1) {
+            totalDistance += kotlin.math.abs(solution[i] - solution[i + 1])
+        }
+        return totalDistance
     }
 }
 
