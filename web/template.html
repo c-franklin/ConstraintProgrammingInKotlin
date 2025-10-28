@@ -6,50 +6,46 @@
     <title>N-Queens Solution Visualizer</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 30px;
+            font-family: monospace;
             max-width: 800px;
-            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h1 {
+        .controls {
             text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid black;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+        .control-button {
+            background: white;
+            color: black;
+            border: 1px solid black;
+            padding: 8px 16px;
+            margin: 0 5px;
+            cursor: pointer;
         }
 
-        .board-container {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
+        .control-button:hover {
+            background: black;
+            color: white;
+        }
+
+        .control-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .speed-control {
+            margin: 15px 0;
         }
 
         .chessboard {
-            border: 3px solid #8B4513;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border-radius: 8px;
-            overflow: hidden;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 20px 0;
         }
 
         .chess-row {
@@ -57,171 +53,67 @@
         }
 
         .chess-square {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            font-weight: bold;
-            position: relative;
-            transition: all 0.3s ease;
+            font-size: 20px;
+            border: 1px solid black;
         }
 
         .chess-square.light {
-            background-color: #f0d9b5;
+            background: white;
         }
 
         .chess-square.dark {
-            background-color: #b58863;
-        }
-
-        .chess-square.queen {
-            animation: placeQueen 0.8s ease-out;
+            background: black;
+            color: white;
         }
 
         .chess-square.queen.hidden {
             opacity: 0;
-            transform: scale(0);
-        }
-
-        .chess-square.queen.placing {
-            animation: placeQueen 0.8s ease-out forwards;
-        }
-
-        @keyframes placeQueen {
-            0% {
-                transform: scale(0) rotate(180deg);
-                opacity: 0;
-            }
-            70% {
-                transform: scale(1.2) rotate(-10deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        .controls {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 2px solid #667eea;
-        }
-
-        .control-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            margin: 0 10px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .control-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .control-button:active {
-            transform: translateY(0);
-        }
-
-        .control-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .speed-control {
-            margin: 15px 0;
-        }
-
-        .speed-control label {
-            font-weight: bold;
-            margin-right: 10px;
-            color: #333;
-        }
-
-        .speed-slider {
-            width: 200px;
-            margin: 0 10px;
         }
 
         .step-info {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #2196f3;
-            font-family: monospace;
-        }
-
-        .step-counter {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .queen-symbol {
-            color: #2c3e50;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px 0;
         }
 
         .info-panel {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
             margin-top: 20px;
-            border-left: 5px solid #667eea;
+            border: 1px solid black;
+            padding: 15px;
         }
 
         .solution-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
             margin-top: 15px;
         }
 
         .detail-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid black;
+            padding: 10px;
             text-align: center;
         }
 
         .detail-value {
-            font-size: 1.5em;
             font-weight: bold;
-            color: #667eea;
         }
 
         .detail-label {
-            color: #666;
             font-size: 0.9em;
-            margin-top: 5px;
         }
 
         .coordinates {
-            font-family: monospace;
-            background: #2c3e50;
-            color: white;
+            border: 1px solid black;
             padding: 10px;
-            border-radius: 5px;
             margin-top: 15px;
-            font-size: 14px;
+            background: black;
+            color: white;
         }
 
         .board-labels {
@@ -231,10 +123,8 @@
         }
 
         .col-label, .row-label {
-            width: 60px;
+            width: 40px;
             text-align: center;
-            font-weight: bold;
-            color: #666;
             font-size: 14px;
         }
 
@@ -248,44 +138,12 @@
             display: flex;
             align-items: center;
         }
-
-        @media (max-width: 600px) {
-            .chess-square {
-                width: 40px;
-                height: 40px;
-                font-size: 24px;
-            }
-            
-            .col-label, .row-label {
-                width: 40px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <main>
         <h1>{{BOARD_SIZE}}-Queens Problem</h1>
-        <p class="subtitle">{{SOLUTION_STATUS}}</p>
-        
-        <div class="controls">
-            <div class="step-counter" id="stepCounter">Ready to start</div>
-            <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
-            <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
-            <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
-            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
-            
-            <div class="speed-control">
-                <label for="speedSlider">Speed:</label>
-                <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="1000" 
-                       oninput="updateSpeed(this.value)">
-                <span id="speedDisplay">1.0x</span>
-            </div>
-            
-            <div class="step-info" id="stepInfo" style="display: none;">
-                <strong>Step <span id="currentStep">0</span> of {{BOARD_SIZE}}:</strong><br>
-                <span id="stepDescription">Click Start Replay to begin</span>
-            </div>
-        </div>
+        <p>{{SOLUTION_STATUS}}</p>
         
         <div class="board-container">
             <div class="board-with-labels">
@@ -329,7 +187,27 @@
                 {{QUEEN_POSITIONS}}
             </div>
         </div>
-    </div>
+
+        <div class="controls">
+            <div class="step-counter" id="stepCounter">Ready to start</div>
+            <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
+            <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
+            <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
+            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
+            
+            <div class="speed-control">
+                <label for="speedSlider">Speed:</label>
+                <input type="range" id="speedSlider" class="speed-slider" min="100" max="2000" value="1000" 
+                       oninput="updateSpeed(this.value)">
+                <span id="speedDisplay">1.0x</span>
+            </div>
+            
+            <div class="step-info" id="stepInfo" style="display: none;">
+                <strong>Step <span id="currentStep">0</span> of {{BOARD_SIZE}}:</strong><br>
+                <span id="stepDescription">Click Start Replay to begin</span>
+            </div>
+        </div>
+    </main>
 
     <script>
         // Replay control variables
@@ -339,15 +217,22 @@
         let replayInterval = null;
         let replaySpeed = 1000; // milliseconds
 
-        // Initialize - hide all queens initially
+        // Initialize - show solution by default
         document.addEventListener('DOMContentLoaded', function() {
-            hideAllQueens();
+            showAllQueens();
             setupHoverEffects();
         });
 
         function hideAllQueens() {
             document.querySelectorAll('.chess-square.queen').forEach(square => {
                 square.classList.add('hidden');
+                square.classList.remove('placing');
+            });
+        }
+
+        function showAllQueens() {
+            document.querySelectorAll('.chess-square.queen').forEach(square => {
+                square.classList.remove('hidden');
                 square.classList.remove('placing');
             });
         }
@@ -371,6 +256,10 @@
         function startReplay() {
             if (isPlaying) return;
             
+            // Hide all queens for animation
+            hideAllQueens();
+            currentStep = 0;
+            
             isPlaying = true;
             document.getElementById('replayBtn').disabled = true;
             document.getElementById('pauseBtn').disabled = false;
@@ -393,7 +282,7 @@
         function resetReplay() {
             pauseReplay();
             currentStep = 0;
-            hideAllQueens();
+            showAllQueens();
             updateStepDisplay();
             document.getElementById('stepCounter').textContent = 'Ready to start';
             document.getElementById('stepInfo').style.display = 'none';

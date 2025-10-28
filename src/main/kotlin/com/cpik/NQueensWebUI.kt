@@ -48,7 +48,7 @@ class NQueensWebUI(private val boardSize: Int) {
                         }
                     }
                 }
-                status = solver.searchForAllSolutions(model, solutionCallback)
+                status = solver.solve(model, solutionCallback)
             } else {
                 // Find single solution
                 status = solver.solve(model)
@@ -206,7 +206,7 @@ fun main() {
         val webUI = NQueensWebUI(size)
         val result = webUI.solveAndGenerateWeb()
         
-        if (result.solution != null) {
+        if (result.solutions.isNotEmpty()) {
             println("✅ Solution found! Check web/nqueens_solution.html")
             break
         } else {
