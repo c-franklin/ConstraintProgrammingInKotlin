@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N-Queens Solution Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: monospace;
@@ -241,6 +242,7 @@
                 Solution <span id="currentSolutionNumber">1</span> of {{SOLUTION_COUNT}}
                 <span id="bestMarker" style="display: none;">🏆 BEST</span>
             </span>
+            <button class="nav-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
             <button class="nav-button" id="nextBtn" onclick="nextSolution()">Next »</button>
         </div>
         
@@ -270,7 +272,6 @@
             <button class="control-button" id="replayBtn" onclick="startReplay()">▶️ Start Replay</button>
             <button class="control-button" id="pauseBtn" onclick="pauseReplay()" disabled>⏸️ Pause</button>
             <button class="control-button" id="resetBtn" onclick="resetReplay()">🔄 Reset</button>
-            <button class="control-button" id="stepBtn" onclick="nextStep()">⏭️ Step</button>
             
             <div class="speed-control">
                 <label for="speedSlider">Speed:</label>

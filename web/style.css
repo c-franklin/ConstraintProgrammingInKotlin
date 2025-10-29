@@ -1,0 +1,223 @@
+body {
+    font-family: monospace;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.controls {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid black;
+}
+
+.control-button {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 8px 16px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.control-button:hover {
+    background: black;
+    color: white;
+}
+
+.control-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.speed-control {
+    margin: 15px 0;
+}
+
+.chessboard {
+    border: 1px solid black;
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.chess-row {
+    display: flex;
+}
+
+.chess-square {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 1px solid black;
+}
+
+.chess-square.light {
+    background: white;
+}
+
+.chess-square.dark {
+    background: black;
+    color: white;
+}
+
+.chess-square.queen.hidden {
+    opacity: 0;
+}
+
+.queen-symbol {
+    color: black;
+}
+
+.chess-square.dark .queen-symbol {
+    color: white;
+}
+
+.step-info {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-panel {
+    margin-top: 20px;
+    border: 1px solid black;
+    padding: 15px;
+}
+
+.solution-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.detail-card {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+.detail-value {
+    font-weight: bold;
+}
+
+.detail-label {
+    font-size: 0.9em;
+}
+
+.coordinates {
+    border: 1px solid black;
+    padding: 10px;
+    margin-top: 15px;
+    background: black;
+    color: white;
+}
+
+.board-labels {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 5px;
+    margin-left: 1px;
+}
+
+.col-label, .row-label {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid transparent;
+}
+
+.row-labels {
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+    margin-top: 1px;
+}
+
+.board-with-labels {
+    display: flex;
+    align-items: flex-start;
+}
+
+.solving-explanation {
+    margin: 15px 0;
+}
+
+.constraint-details, .process-steps {
+    margin: 10px 0;
+}
+
+.constraint-item, .step {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 3px solid black;
+}
+
+.verification {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f0f8ff;
+    border: 1px solid #ccc;
+}
+
+.verification ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 4px;
+    font-family: monospace;
+    border: 1px solid #ccc;
+}
+
+.solution-navigator {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px solid black;
+    background: #f9f9f9;
+}
+
+.nav-button {
+    background: white;
+    color: black;
+    border: 1px solid black;
+    padding: 8px 16px;
+    margin: 0 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.nav-button:hover {
+    background: black;
+    color: white;
+}
+
+.nav-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    color: #666;
+}
+
+.solution-info {
+    font-weight: bold;
+    margin: 0 20px;
+}
+
+#bestMarker {
+    color: #ff6600;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}

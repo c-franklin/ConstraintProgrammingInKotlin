@@ -18,8 +18,31 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.cpik.NQueensExplainedKt'
+    mainClass = 'com.cpik.NQueensWebUIKt'
 }
+
+// Task to open the generated HTML file in the default browser
+task openWebPage(type: Exec) {
+    def htmlFile = file('web/nqueens_solution.html')
+    
+    doFirst {
+        if (!htmlFile.exists()) {
+            throw new GradleException("HTML file not found: ${htmlFile.absolutePath}")
+        }
+    }
+    
+    // Cross-platform browser opening
+    if (System.properties['os.name'].toLowerCase().contains('mac')) {
+        commandLine 'open', htmlFile.absolutePath
+    } else if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'start', htmlFile.absolutePath
+    } else {
+        commandLine 'xdg-open', htmlFile.absolutePath
+    }
+}
+
+// Make run task automatically open the web page
+run.finalizedBy openWebPage
 
 test {
     useJUnitPlatform()
